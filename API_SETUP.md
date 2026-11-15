@@ -1,27 +1,25 @@
-# Getting a free AI API key
+# Groq API setup
 
-A practical starting point for the current Gitagent code is [GroqCloud](https://console.groq.com/), which offers an OpenAI-compatible API and has offered a free developer tier. Create an account, generate an API key from the Groq console, then check the console for the current model name and usage limits. Free quotas and eligibility can change.
+Gitagent calls Groq's OpenAI-compatible Chat Completions API at `https://api.groq.com/openai/v1/chat/completions` when `GROQ_API_KEY` is set. Create a key in the [Groq Console](https://console.groq.com/keys). Check [Groq's current model list](https://console.groq.com/docs/models) and your console for models available to your account and their usage limits. Free-tier eligibility and quotas may change.
 
-Set these environment variables in the same terminal where you run Gitagent. Replace the placeholder values with your key and a chat model currently available in your Groq console:
+The current default model in Gitagent is `llama-3.3-70b-versatile`, matching the example in the supplied Groq API reference. Override it with `GROQ_MODEL` if Groq's model list or your account requires another model.
 
-### macOS / Linux
+## macOS / Linux
 
 ```bash
-export OPENAI_API_KEY="your-groq-api-key"
-export OPENAI_BASE_URL="https://api.groq.com/openai/v1"
-export OPENAI_MODEL="model-name-from-your-groq-console"
-python gitagent.py ask "Help me plan my day"
+export GROQ_API_KEY="your-groq-api-key"
+export GROQ_MODEL="llama-3.3-70b-versatile"
+python gitagent.py ask "Explain the importance of fast language models"
 ```
 
-### Windows PowerShell
+## Windows PowerShell
 
 ```powershell
-$env:OPENAI_API_KEY = "your-groq-api-key"
-$env:OPENAI_BASE_URL = "https://api.groq.com/openai/v1"
-$env:OPENAI_MODEL = "model-name-from-your-groq-console"
-python gitagent.py ask "Help me plan my day"
+$env:GROQ_API_KEY = "your-groq-api-key"
+$env:GROQ_MODEL = "llama-3.3-70b-versatile"
+python gitagent.py ask "Explain the importance of fast language models"
 ```
 
-The same configuration powers `summarize-call` and `reply`. Do not paste your key into GitHub, source files, screenshots, or chat. Environment variables set this way last only for the current terminal session. Treat transcripts and messages as potentially sensitive: using a hosted API sends their text to that provider. Check the provider's privacy terms and current free-tier limits before use.
+The same settings are used by `summarize-call` and `reply`. Do not paste the key into source code, GitHub, screenshots, or chat. These shell environment variables are temporary and last only for the current terminal session. Hosted API requests send prompt/transcript text to Groq; avoid submitting sensitive content unless you have permission and have reviewed the provider's data practices.
 
-Gitagent uses OpenAI-compatible Chat Completions. Other compatible providers may work by changing the base URL, key, and model, but support and free quotas vary. Google AI Studio also offers a Gemini API with a free tier in eligible regions, but its API format differs from the OpenAI-compatible endpoint currently used by Gitagent.
+Gitagent also retains support for other OpenAI-compatible providers: set `OPENAI_API_KEY`, and optionally `OPENAI_BASE_URL` and `OPENAI_MODEL`. For Groq, `GROQ_BASE_URL` can override the default endpoint; otherwise Gitagent uses the official Groq base URL. `GROQ_MODEL` takes precedence over `OPENAI_MODEL` when `GROQ_API_KEY` is set.

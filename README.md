@@ -10,16 +10,7 @@ Requires Python 3.10+ and has no third-party package dependencies.
 python gitagent.py --help
 ```
 
-AI-generated summaries, reply drafts, and general questions require an OpenAI-compatible API key. Configure it in your shell (never put secrets in source code):
-
-```bash
-export OPENAI_API_KEY="your-key"
-# Optional, for compatible services:
-export OPENAI_BASE_URL="https://api.openai.com/v1"
-export OPENAI_MODEL="gpt-4o-mini"
-```
-
-On Windows PowerShell, use `$env:OPENAI_API_KEY="your-key"`.
+For Groq API setup, see [API_SETUP.md](API_SETUP.md). Gitagent uses Groq's OpenAI-compatible Chat Completions endpoint when `GROQ_API_KEY` is set. You can also use compatible providers with the `OPENAI_API_KEY` settings documented in [API_SETUP.md](API_SETUP.md).
 
 ## Features
 

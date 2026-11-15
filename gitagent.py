@@ -90,19 +90,26 @@ def cleanup_report(directory: Path) -> list[Path]:
 
 
 def ask_model(prompt: str, system: str) -> str:
-    """Use an OpenAI-compatible Chat Completions endpoint when configured."""
-    api_key = os.getenv("OPENAI_API_KEY")
+    """Call Groq by default when GROQ_API_KEY is set; otherwise use OpenAI-compatible settings."""
+    groq_key = os.getenv("GROQ_API_KEY")
+    api_key = groq_key or os.getenv("OPENAI_API_KEY")
     if not api_key:
-        raise RuntimeError("Set OPENAI_API_KEY to use AI-generated text. Local file tools work without it.")
-    base_url = os.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1").rstrip("/")
-    model = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+        raise RuntimeError("Set GROQ_API_KEY (Groq) or OPENAI_API_KEY to use AI features. Local file tools work without an API key.")
+
+    if groq_key:
+        base_url = os.getenv("GROQ_BASE_URL") or os.getenv("OPENAI_BASE_URL") or "https://api.groq.com/openai/v1"
+        model = os.getenv("GROQ_MODEL") or os.getenv("OPENAI_MODEL") or "llama-3.3-70b-versatile"
+    else:
+        base_url = os.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1")
+        model = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
+
     body = json.dumps({
         "model": model,
         "messages": [{"role": "system", "content": system}, {"role": "user", "content": prompt}],
         "temperature": 0.3,
     }).encode()
     request = urllib.request.Request(
-        f"{base_url}/chat/completions", data=body,
+        f"{base_url.rstrip('/')}/chat/completions", data=body,
         headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
         method="POST",
     )
