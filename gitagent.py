@@ -5,7 +5,6 @@ from __future__ import annotations
 import argparse
 import json
 import os
-import re
 import shutil
 import sys
 import urllib.error
@@ -104,7 +103,7 @@ def ask_model(prompt: str, system: str) -> str:
     }).encode()
     request = urllib.request.Request(
         f"{base_url}/chat/completions", data=body,
-        headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json""},
+        headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
         method="POST",
     )
     try:
